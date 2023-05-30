@@ -2,6 +2,7 @@
 NULL_CHAR = chr(0)
 
 import pygame
+import threading
 import time
 from codes import *
 from time import sleep
@@ -115,21 +116,25 @@ def chatGPT():
 
 def keyboardEmu():
     typedKey = wait_key()
-    if typedKey == '0':
-        print("Gpting")
-        sleep(0.1)
-        chatGPT()
-        
-    else:
-        tempNum = ord(typedKey) - 93
-        print(tempNum)
-        caps = NULL_CHAR
-        pressed_keys = pygame.key.get_pressed()
-        if pressed_keys[pygame.K_LSHIFT]:
-            caps = chr(32)
-        typeKey(tempNum)
-        write_report(NULL_CHAR*8) # stop pressing
-        keyboardEmu()
+    try:
+        print(f"You pressed: {typedKey}!")
+        if typedKey == '0':
+            print("Gpting")
+            sleep(0.1)
+            chatGPT()
+
+        else:
+            tempNum = ord(typedKey) - 93
+            print(tempNum)
+            caps = NULL_CHAR
+            pressed_keys = pygame.key.get_pressed()
+            if pressed_keys[pygame.K_LSHIFT]:
+                caps = chr(32)
+            typeKey(tempNum)
+            write_report(NULL_CHAR*8) # stop pressing
+            keyboardEmu()
+    except Exception as E:
+        print(f"Error: {E}")
 
 
 keyboardEmu()
